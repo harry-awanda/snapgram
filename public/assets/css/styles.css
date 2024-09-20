@@ -1,0 +1,93 @@
+/* Navbar styling */
+.navbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  border-top: 1px solid #ddd;
+  z-index: 1030;
+  /* Tambahkan padding untuk navbar */
+  padding: 10px 0;
+}
+
+/* Tambahkan padding-bottom pada body untuk menghindari overlap dengan navbar */
+body {
+  padding-bottom: 70px;
+  /* Sesuaikan dengan tinggi navbar */
+}
+
+.navbar-nav {
+  width: 90%;
+  /* Menyesuaikan lebar navbar untuk layar kecil */
+  max-width: 300px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+}
+
+.nav-item .nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+.thumbnail {
+  width: 100%;
+  /* Atur lebar gambar sesuai lebar card */
+  height: 0;
+  padding-top: 100%;
+  /* Membuat rasio 1:1 */
+  position: relative;
+  overflow: hidden;
+}
+
+.thumbnail img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Menggunakan object-fit untuk menjaga rasio gambar */
+}
+
+.grid-wrapper {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-auto-rows: 200px;
+  grid-auto-flow: dense;
+}
+
+/* Menambahkan media query untuk layar lebih kecil */
+@media (max-width: 500px) {
+  .grid-wrapper {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+.grid-wrapper>div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-wrapper>div>img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grid-wrapper .wide {
+  grid-column: span 2;
+}
+
+.grid-wrapper .tall {
+  grid-row: span 2;
+}
+
+.grid-wrapper .big {
+  grid-column: span 2;
+  grid-row: span 2;
+}
