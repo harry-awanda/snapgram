@@ -13,15 +13,15 @@ class AlbumController extends Controller {
     }])->get();
     return view('albums.index', compact('albums'));
   }
-  // Fungsi untuk menampilkan form tambah album
+
   public function create() {
     return view('albums.create');
   }
-  // Fungsi untuk menyimpan album baru
+
   public function store(Request $request) {
     $request->validate([
       'namaAlbum' => 'required|string|max:255',
-      'deskripsi' => 'required|string|max:180',
+      'deskripsi' => 'required|string|max:150',
     ]);
     Album::create([
       'namaAlbum' => $request->namaAlbum,
@@ -31,44 +31,43 @@ class AlbumController extends Controller {
     ]);
     return redirect()->route('albums.index')->with('success', 'Album berhasil dibuat.');
   }
-  public function edit($albumID) {
-    $album = Album::findOrFail($albumID);
-    // Pastikan hanya user yang membuat album bisa mengedit
+
+  public function edit(Album $album) {
     if ($album->userID !== Auth::id()) {
       abort(403, 'Unauthorized action.');
     }
     return view('albums.edit', compact('album'));
   }
-  public function update(Request $request, $albumID) {
-    $album = Album::findOrFail($albumID);
-    // Pastikan hanya user yang membuat album bisa mengupdate
+
+  public function update(Request $request, Album $album) {
     if ($album->userID !== Auth::id()) {
       abort(403, 'Unauthorized action.');
     }
-    // Validasi input
+
     $request->validate([
       'namaAlbum' => 'required|string|max:255',
       'deskripsi' => 'required|string|max:150',
     ]);
-    // Update data album
-    $album->namaAlbum = $request->namaAlbum;
-    $album->deskripsi = $request->deskripsi;
-    $album->save();
+
+    $album->update([
+      'namaAlbum' => $request->namaAlbum,
+      'deskripsi' => $request->deskripsi,
+    ]);
+
     return redirect()->route('albums.index')->with('success', 'Album berhasil diperbarui!');
   }
-  public function destroy($albumID) {
-    $album = Album::findOrFail($albumID);
-    // Pastikan hanya user yang membuat album yang dapat menghapus
+
+  public function destroy(Album $album) {
     if ($album->userID !== Auth::id()) {
       abort(403, 'Unauthorized action.');
     }
-    // Hapus semua foto di dalam album (jika diperlukan)
+
     foreach ($album->photos as $photo) {
       // Hapus file foto dari storage
       Storage::delete($photo->lokasiFile);
       $photo->delete();
     }
-    // Hapus album
+
     $album->delete();
     return redirect()->route('albums.index')->with('success', 'Album berhasil dihapus!');
   }
